@@ -1,4 +1,4 @@
-var jsflow = function (canvas, grab, release, couple, rearranging, scale, x_space, y_space, type) {
+var jsflow = function (canvas, grab, release, couple, rearranging, clone, x_space, y_space, type) {
     console.log("cargo jSflow")
     if (!grab) {
         grab = function () { };
@@ -16,9 +16,9 @@ var jsflow = function (canvas, grab, release, couple, rearranging, scale, x_spac
             return false;
         }
     }
-    if (!scale) {
-        scale = function () {
-            return false;
+    if (!clone) {
+        clone = function () {
+            return false
         }
     }
     if (!x_space) {
@@ -265,6 +265,10 @@ var jsflow = function (canvas, grab, release, couple, rearranging, scale, x_spac
 
     function beforeDelete(drag, parent) {
         return rearranging(drag, parent);
+    }
+
+    function blockClone(block,parent){
+        scale(block,parent);
     }
 
     function addEventListenerMulti(type, listener, capture, selector) {
