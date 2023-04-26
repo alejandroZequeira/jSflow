@@ -1,0 +1,14 @@
+#canvas{
+    width: 100px;
+    height: 100px;
+    background-color: aquamarine;
+}
+.blockelemt{
+    background-color: rgb(211, 243, 232);
+}
+.blockelemt:hover {
+    box-shadow: 0px 4px 30px rgba(22, 33, 74, 0.08);
+    border-radius: 5px;
+    background-color: #FFF;
+    cursor: pointer;
+}
