@@ -1,4 +1,4 @@
-var jsflow = function (canvas, grab, release, couple, rearranging, clone, x_space, y_space, type) {
+var jsflow = function (canvas, grab, release, couple, rearranging, x_space, y_space, type) {
     console.log("cargo jSflow")
     if (!grab) {
         grab = function () { };
@@ -14,11 +14,6 @@ var jsflow = function (canvas, grab, release, couple, rearranging, clone, x_spac
     if (!rearranging) {
         rearranging = function () {
             return false;
-        }
-    }
-    if (!clone) {
-        clone = function () {
-            return false
         }
     }
     if (!x_space) {
@@ -290,49 +285,258 @@ var jsflow = function (canvas, grab, release, couple, rearranging, clone, x_spac
                         for (var z = 0; z < blocks.filter(id => id.parent == blocko[i]).length; z++) {
                             var children = blocks.filter(id => id.parent == blocko[i])[z]
                             if (children.childWidth > children.width) {
-                                totalwidth+=children.childWidth+pdX
-                            }else{
-                                totalwidth+=children.width+pdX
+                                totalwidth += children.childWidth + pdX
+                            } else {
+                                totalwidth += children.width + pdX
                             }
                         }
-                        totalwidth+=parseInt(window.getComputedStyle(drag).width)
+                        totalwidth += parseInt(window.getComputedStyle(drag).width)
                         for (var z = 0; z < blocks.filter(id => id.parent == blocko[i]).length; z++) {
                             var children = blocks.filter(id => id.parent == blocko[i])[z]
                             if (children.childWidth > children.width) {
-                                document.querySelector(".blockid[value='" + children.id + "']").parentNode.style.left=blocks.filter(id=>id.id==blocko[i])[0].x-(totalwidth/2)+totalremove+(children.childWidth/2)-(children.width/2)+"px"
-                                children.x=blocks.filter(id=>id.parent==blocko[i])[0].x-(totalwidth/2)+totalremove+(children.width/2)
-                                totalremove+=children.childWidth+pdX
-                            }else{
-                                document.querySelector(".blockid[value='" + children.id + "']").parentNode.style.left=blocks.filter(id=>id.id==blocko[i])[0].x-(totalwidth/2)+totalremove+"px"
-                                children.x=blocks.filter(id=>id.parent==blocko[i])[0].x-(totalwidth/2)+totalremove+(children.width/2)
-                                totalremove+=children.width+pdX
+                                document.querySelector(".blockid[value='" + children.id + "']").parentNode.style.left = blocks.filter(id => id.id == blocko[i])[0].x - (totalwidth / 2) + totalremove + (children.childWidth / 2) - (children.width / 2) + "px"
+                                children.x = blocks.filter(id => id.parent == blocko[i])[0].x - (totalwidth / 2) + totalremove + (children.width / 2)
+                                totalremove += children.childWidth + pdX
+                            } else {
+                                document.querySelector(".blockid[value='" + children.id + "']").parentNode.style.left = blocks.filter(id => id.id == blocko[i])[0].x - (totalwidth / 2) + totalremove + "px"
+                                children.x = blocks.filter(id => id.parent == blocko[i])[0].x - (totalwidth / 2) + totalremove + (children.width / 2)
+                                totalremove += children.width + pdX
                             }
                         }
                         //posicionamos el bloque 
-                        drag.style.left=blocks.filter(id=>id.id==blocko[i])[0].x-(totalwidth/2)+totalremove-(window.scrollX+absx)+div_canvas.scrollLeft+div_canvas.getBoundingClientRect().left+"px"
-                        drag.style.top=blocks.filter(id=>id.id==blocko[i])[0].y-(blocks.filter(id=>id.id==blocko[i])[0].height/2)+pdY-(window.scrollY+absy)+div_canvas.getBoundingClientRect().top+"px"
-                        //
-                        if(rearranging){
-                            tempBlocks.filter(a=>a.id==parseInt(drag.querySelector(".blockid").value))[0].x=(drag.getBoundingClientRect().left+window.scrollX)+(parseInt(window.getComputedStyle(drag).width)/2)+div_canvas.scrollLeft-div_canvas.getBoundingClientRect().left
-                            tempBlocks.filter(a=>a.id==parseInt(drag.querySelector(".blockid").value))[0].y=(drag.getBoundingClientRect().top+window.scrollY)+(parseInt(window.getComputedStyle(drag).height)/2)+div_canvas.scrollTop-div_canvas.getBoundingClientRect().top
-                            tempBlocks.filter(a=>a.id==parseInt(drag.querySelector(".blockid").value))[0].parent=blocko[i]
-                            for(var z=0;z<tempBlocks.length;z++){
-                            
+                        drag.style.left = blocks.filter(id => id.id == blocko[i])[0].x - (totalwidth / 2) + totalremove - (window.scrollX + absx) + div_canvas.scrollLeft + div_canvas.getBoundingClientRect().left + "px"
+                        drag.style.top = blocks.filter(id => id.id == blocko[i])[0].y - (blocks.filter(id => id.id == blocko[i])[0].height / 2) + pdY - (window.scrollY + absy) + div_canvas.getBoundingClientRect().top + "px"
+                        //analizando si el bloque es el primero si no se re organizan los demas
+                        if (rearranging) {
+                            tempBlocks.filter(a => a.id == parseInt(drag.querySelector(".blockid").value))[0].x = (drag.getBoundingClientRect().left + window.scrollX) + (parseInt(window.getComputedStyle(drag).width) / 2) + div_canvas.scrollLeft - div_canvas.getBoundingClientRect().left
+                            tempBlocks.filter(a => a.id == parseInt(drag.querySelector(".blockid").value))[0].y = (drag.getBoundingClientRect().top + window.scrollY) + (parseInt(window.getComputedStyle(drag).height) / 2) + div_canvas.scrollTop - div_canvas.getBoundingClientRect().top
+                            tempBlocks.filter(a => a.id == parseInt(drag.querySelector(".blockid").value))[0].parent = blocko[i]
+                            for (var z = 0; z < tempBlocks.length; z++) {
+                                if (tempBlocks[z].id != parseInt(drag.querySelector(".blockid").value)) {
+                                    const parentBlock = document.querySelector(".blockid[value='" + tempBlocks[z].id + "']").parentNode
+                                    const ArrowBlockparent = document.querySelector(".blockid[value='" + tempBlocks[z].id + "']").parentNode
+                                    parentBlock.style.left = (parentBlock.getBoundingClientRect().left) - (div_canvas.getBoundingClientRect().left) + div_canvas.scrollLeft + "px"
+                                    parentBlock.style.top = (parentBlock.getBoundingClientRect().top) - (div_canvas.getBoundingClientRect().top) + div_canvas.scrollTop + "px"
+                                    ArrowBlockparent.style.left = (ArrowBlockparent.getBoundingClientRect().left) - (div_canvas.getBoundingClientRect().left) + div_canvas.scrollLeft + "px"
+                                    ArrowBlockparent.style.top = (ArrowBlockparent.getBoundingClientRect().top) - (div_canvas.getBoundingClientRect().top) + div_canvas.scrollTop + "px"
+
+                                    div_canvas.appendChild(parentBlock)
+                                    div_canvas.appendChild(ArrowBlockparent)
+
+                                    tempBlocks[z].x = (parentBlock.getBoundingClientRect().left + window.scrollX) - (parseInt(window.getComputedStyle(parentBlock).width) / 2) + div_canvas.scrollLeft - div_canvas.getBoundingClientRect().left
+                                    tempBlocks[z].x = (parentBlock.getBoundingClientRect().top + window.scrollY) - (parseInt(window.getComputedStyle(parentBlock).height) / 2) + div_canvas.scrollTop - div_canvas.getBoundingClientRect().top
+                                }
+                            }
+                            blocks = blocks.concat(tempBlocks)
+                            tempBlocks = []
+                        } else {
+                            blocks.push({
+                                childWidth: 0,
+                                parent: blocko[i],
+                                id: parseInt(drag.querySelector(".blockid").value),
+                                x: (drag.getBoundingClientRect().left + window.scrollX) + (parseInt(window.getComputedStyle(drag).width) / 2) + div_canvas.scrollLeft - div_canvas.getBoundingClientRect().left,
+                                y: (drag.getBoundingClientRect().top + window.scrollY) + (parseInt(window.getComputedStyle(drag).height) / 2) + div_canvas.scrollTop - div_canvas.getBoundingClientRect().top,
+                                width: parseInt(window.getComputedStyle(drag).width),
+                                height: parseInt(window.getComputedStyle(drag).height)
+                            })
+                        }
+                        //dibujar flecha
+                        var arrowblock = blocks.filter(a => a.id == parseInt(drag.querySelector(".blockid").value))[0]
+                        var arrowX = arrowblock.x - blocks.filter(a => a.id == blocko[i])[0].x + 20
+                        var arrowy = pdY
+                        arrow(arrowblock, arrowX, arrowy, blocko[i])
+
+                        if (blocks.filter(a => a.id == blocko[i])[0].parent != -1) {
+                            var flag = false
+                            var id = blocko[i]
+                            while (!flag) {
+                                if (blocks.filter(a => a.id == id)[0].parent == -1) {
+                                    flag = true
+                                } else {
+                                    var zwidth = 0
+                                    for (var w = 0; w < blocks.filter(a => a.parent == id).length; w++) {
+                                        var children = blocks.filter(a => a.parent == id)[w]
+                                        if (children.childWidth > children.width) {
+                                            if (w == blocks.filter(a => a.parent == id).length - 1) {
+                                                zwidth += children.childWidth
+                                            } else {
+                                                zwidth += children.childWidth + pdX
+                                            }
+                                        } else {
+                                            if (w == blocks.filter(a => a.parent == id)[0].length - 1) {
+                                                zwidth += children.width
+                                            } else {
+                                                zwidth += children.width + pdX
+                                            }
+                                        }
+                                    }
+
+                                    blocks.filter(a => a.id == id)[0].childWidth = zwidth
+                                    id = blocks.filter(a => a.id == id)[0].parent
+                                }
+                            }
+                            blocks.filter(a => a.id == id)[0].childWidth = totalwidth
+                        }
+                        if (rearranging) {
+                            rearranging = false
+                            drag.classList.remove("dragging")
+                        }
+                        rearrangeMe()
+                        checkOffset()
+                    }//fin de case tree-vertical
+                }
+            }
+            function touchblock(event) {
+                dragblock = false
+                if (hasParentClass(event.target, "block")) {
+                    var theblock = event.target.closest(".block")
+                    if (event.targetTouches) {
+                        mouse_x = event.targetTouches[0].clientX
+                        mouse_y = event.targetTouches[0].clientY
+                    } else {
+                        mouse_x = event.clientX
+                        mouse_y = event.clientY
+                    }
+                    if (event.type !== "mouseup" && hasParentClass(event.target, "block")) {
+                        if (event.which != 3) {
+                            if (!active && !rearranging) {
+                                dragblock = true
+                                drag = theblock
+                                dragx = mouse_x - (drag.getBoundingClientRect().left + window.scrollX)
+                                dragy = mouse_y - (drag.getBoundingClientRect().top + window.scrollY)
                             }
                         }
                     }
                 }
             }
 
+            function hasParentClass(elemt, classname) {
+                if (elemt.className) {
+                    if (elemt.className.split(" ").indexOf(classname) >= 0) return true
+                }
+                return elemt.parentNode && hasParentClass(elemt.parentNode, classname)
+            }
+
+            jsflow.moveBlock = function (event) {
+                if (event.targetTouches) {
+                    mouse_x = event.targetTouches[0].clientX
+                    mouse_y = event.targetTouches[0].clientY
+                } else {
+                    mouse_x = event.clientX
+                    mouse_y = event.clientY
+                }
+                if (dragblock) {
+                    rearranging = true
+                    drag.classList.add("dragging")
+                    var blockid = parseInt(drag.querySelector(".blockid").value)
+                    prevblock = blocks.filter(a => a.id == blockid)[0].parent
+                    tempBlocks.push(blocks.filter(a => a.id == blockid)[0])
+                    blocks = blocks.filter(function (e) {
+                        return e.id != blockid
+                    })
+                    if (blockid != 0) {
+                        document.querySelector(".arrowid[value='" + blockid + "']").parentNode.remove()
+                    }
+                    var layer = blocks.filter(a => a.parent == blockid)
+                    var flag = false
+                    var foundids = []
+                    var allids = []
+                    while (!flag) {
+
+                        for (var i = 0; i < layer.length; i++) {
+                            if (layer[i] != blockid) {
+                                tempBlocks.push(blocks.filter(a => a.id == layer[i].id)[0])
+                                const parentBlock = document.querySelector(".blockid[value='" + layer[i].id + "']").parentNode
+                                const ArrowBlockparent = document.querySelector(".blockid[value='" + layer[i].id + "']").parentNode
+                                parentBlock.style.left = (parentBlock.getBoundingClientRect().left) - (div_canvas.getBoundingClientRect().left) + "px"
+                                parentBlock.style.top = (parentBlock.getBoundingClientRect().top) - (div_canvas.getBoundingClientRect().top) + "px"
+                                ArrowBlockparent.style.left = (ArrowBlockparent.getBoundingClientRect().left) - (div_canvas.getBoundingClientRect().left) + "px"
+                                ArrowBlockparent.style.top = (ArrowBlockparent.getBoundingClientRect().top) - (div_canvas.getBoundingClientRect().top) + "px"
+
+                                drag.appendChild(parentBlock)
+                                drag.appendChild(ArrowBlockparent)
+
+                                foundids.push(layer[i].id)
+                                allids.push(layer[i].id)
+                            }
+                        }
+                        if (foundids.length == 0) {
+                            flag==true
+                        }else{
+                            layer=blocks.filter(a=>foundids.includes(a.parent))
+                            foundids=[]
+                        }
+                    }
+                    for(var i=0;i<blocks.filter(a=>a.parent==blockid).length;i++){
+                        var numberblocks=blocks.filter(a=>a.parent==blockid)[i]
+                        blocks=blocks.filter(function(e){
+                            return e.id!=numberblocks
+                        })
+                    }
+                    for(var i=0;i<allids.length;i++){
+                        var numberblocks=allids[i]
+                        blocks=blocks.filter(function(e){
+                            return e.id!=numberblocks
+                        })
+                    }
+                    if(blocks.length>1){
+                        rearrangeMe()
+                    }
+                    dragblock=false
+                }
+                if(active){
+                    drag.style.left=mouse_x-dragx+"px"
+                    drag.style.top=mouse_y-dragy+"px"
+                }else if(rearranging){
+                    drag.style.left=mouse_x-dragx-(window.scrollX+absx)+div_canvas.scrollLeft+"px"
+                    drag.style.top=mouse_y-dragy-(window.scrollY+absy)+div_canvas.scrollTop+"px"
+                    tempBlocks.filter(a=>a.id==parseInt(drag.querySelector(".blockid").value)).x=(drag.getBoundingClientRect().left+window.scrollX)+(parseInt(window.getComputedStyle(drag).width)/2)+div_canvas.scrollLeft
+                    tempBlocks.filter(a=>a.id==parseInt(drag.querySelector(".blockid").value)).y=(drag.getBoundingClientRect().top+window.scrollY)+(parseInt(window.getComputedStyle(drag).height)/2)+div_canvas.scrollTop
+                }
+                if(active||rearranging){
+                    if(mouse_x>div_canvas.getBoundingClientRect().width+div_canvas.getBoundingClientRect().left-10&&mouse_x<div_canvas.getBoundingClientRect().width+div_canvas.getBoundingClientRect().left+10){
+                        div_canvas.scrollLeft+=10
+                    }else if(mouse_x<div_canvas.getBoundingClientRect().left+10&&mouse_x>div_canvas.getBoundingClientRect().left-10){
+                        div_canvas.scrollLeft-=10
+                    }else if(mouse_y>div_canvas.getBoundingClientRect().height+div_canvas.getBoundingClientRect().top-10&&mouse_y<div_canvas.getBoundingClientRect().height+div_canvas.getBoundingClientRect().top+10){
+                        div_canvas.scrollTop+=10
+                    }else if(mouse_y<div_canvas.getBoundingClientRect().top+10&&mouse_y>div_canvas.getBoundingClientRect().top-10){
+                        div_canvas.scrollTop-=10
+                    }
+                    var xpos=(drag.getBoundingClientRect().left+window.scrollX)+(parseInt(window.getComputedStyle(drag).width)/2)+div_canvas.scrollLeft-div_canvas.getBoundingClientRect().left
+                    var ypos=(drag.getBoundingClientRect().top+window.scrollY)+div_canvas.scrollTop-div_canvas.getBoundingClientRect().top
+                    var blocko=blocks.map(a=>a.id)
+                    for(var i=0;i<blocks.length;i++){
+                        if(attach(blocko[i])){
+                            document.querySelector(".blockid[value='"+blocko[i]+"']").parentNode.appendChild(document.querySelector(".indicator"))
+                            document.querySelector(".indicator").style.left=(document.querySelector(".blockid[value='"+blocko[i]+"']").parentNode.offsetWidth/2)-5+"px"
+                            document.querySelector(".indicator").style.top=(document.querySelector(".blockid[value='"+blocko[i]+"']").parentNode.offsetHright)+"px"
+                            document.querySelector(".indicator").classList.remove("invisible")
+                            break
+                        }else if(i==blocks.length-1){
+                            if(!document.querySelector(".indicator").classList.contains("invisible")){
+                                document.querySelector(".indicator").classList.add("invisible")
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            jsflow.blockclone = function (block) {
+            }
+
+            //control de los eventos touch y click 
+
             document.addEventListener("mousedown", jsflow.initDrag);
-            //document.addEventListener("mousedown", touchblock, false);
+            document.addEventListener("mousedown", touchblock, false);
             document.addEventListener("touchstart", jsflow.initDrag);
-            // document.addEventListener("touchstart", touchblock, false);
+            document.addEventListener("touchstart", touchblock, false);
 
 
-            //document.addEventListener("mouseup", touchblock, false);
-            //document.addEventListener("mousemove", flowy.moveBlock, false);
-            //document.addEventListener("touchmove", flowy.moveBlock, false);
+            document.addEventListener("mouseup", touchblock, false);
+            document.addEventListener("mousemove", flowy.moveBlock, false);
+            document.addEventListener("touchmove", flowy.moveBlock, false);
 
             document.addEventListener("mouseup", jsflow.endDrag, false);
             document.addEventListener("touchend", jsflow.endDrag, false);
@@ -353,10 +557,6 @@ var jsflow = function (canvas, grab, release, couple, rearranging, clone, x_spac
 
         function beforeDelete(drag, parent) {
             return rearranging(drag, parent);
-        }
-
-        function blockClone(block, parent) {
-            scale(block, parent);
         }
 
         function addEventListenerMulti(type, listener, capture, selector) {
