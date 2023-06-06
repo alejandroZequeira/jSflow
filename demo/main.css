@@ -1,6 +1,6 @@
 #canvas{
-    width: 90vh;
-    height: 90vh;
+    width: 90%;
+    height: 90%;
     background-color: aquamarine;
     position: absolute;
 }
