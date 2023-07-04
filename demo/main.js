@@ -12,7 +12,7 @@ function onRelease(){
 }
 
 function oncouple(block, first, parent){
-	block.append("<p>block number: "+cont+"</p>")	
+	block.innerHTML+="<p>block number: "+cont+"</p>"	
 	cont++
 	return true
 }

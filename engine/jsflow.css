@@ -1,3 +1,6 @@
+#canvas{
+    overflow: auto;
+}
 .dragging {
     z-index: 111 !important
 }

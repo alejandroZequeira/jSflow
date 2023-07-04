@@ -255,10 +255,13 @@ var flowy = function(canvas, grab, release, snapping, rearrange, spacing_x, spac
                     if (blockstemp[w].id != parseInt(drag.querySelector(".blockid").value)) {
                         const blockParent = document.querySelector(".blockid[value='" + blockstemp[w].id + "']").parentNode;
                         const arrowParent = document.querySelector(".arrowid[value='" + blockstemp[w].id + "']").parentNode;
+
                         blockParent.style.left = (blockParent.getBoundingClientRect().left + window.scrollX) - (window.scrollX) + canvas_div.scrollLeft - 1 - absx + "px";
                         blockParent.style.top = (blockParent.getBoundingClientRect().top + window.scrollY) - (window.scrollY) + canvas_div.scrollTop - absy - 1 + "px";
+                        
                         arrowParent.style.left = (arrowParent.getBoundingClientRect().left + window.scrollX) - (window.scrollX) + canvas_div.scrollLeft - absx - 1 + "px";
                         arrowParent.style.top = (arrowParent.getBoundingClientRect().top + window.scrollY) + canvas_div.scrollTop - 1 - absy + "px";
+                        
                         canvas_div.appendChild(blockParent);
                         canvas_div.appendChild(arrowParent);
                         blockstemp[w].x = (blockParent.getBoundingClientRect().left + window.scrollX) + (parseInt(blockParent.offsetWidth) / 2) + canvas_div.scrollLeft - canvas_div.getBoundingClientRect().left - 1;
@@ -460,10 +463,13 @@ var flowy = function(canvas, grab, release, snapping, rearrange, spacing_x, spac
                             blockstemp.push(blocks.filter(a => a.id == layer[i].id)[0]);
                             const blockParent = document.querySelector(".blockid[value='" + layer[i].id + "']").parentNode;
                             const arrowParent = document.querySelector(".arrowid[value='" + layer[i].id + "']").parentNode;
+
                             blockParent.style.left = (blockParent.getBoundingClientRect().left + window.scrollX) - (drag.getBoundingClientRect().left + window.scrollX) + "px";
                             blockParent.style.top = (blockParent.getBoundingClientRect().top + window.scrollY) - (drag.getBoundingClientRect().top + window.scrollY) + "px";
+                            
                             arrowParent.style.left = (arrowParent.getBoundingClientRect().left + window.scrollX) - (drag.getBoundingClientRect().left + window.scrollX) + "px";
                             arrowParent.style.top = (arrowParent.getBoundingClientRect().top + window.scrollY) - (drag.getBoundingClientRect().top + window.scrollY) + "px";
+                            
                             drag.appendChild(blockParent);
                             drag.appendChild(arrowParent);
                             foundids.push(layer[i].id);

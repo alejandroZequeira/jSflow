@@ -71,6 +71,8 @@ var jsflow = function (canvas, grab, release, couple, rearrange, x_space, y_spac
 
         var dragblock = false;
         var prevblock = 0;
+        var move=false;
+        var clicMove=false
 
         var el = document.createElement("DIV");
         el.classList.add('indicator');
@@ -425,7 +427,9 @@ var jsflow = function (canvas, grab, release, couple, rearrange, x_space, y_spac
                 rearrange = true;
                 drag.classList.add("dragging");
                 var blockid = parseInt(drag.querySelector(".blockid").value);
+                console.log("valor del blockid en move",blockid);
                 prevblock = blocks.filter(a => a.id == blockid)[0].parent;
+                console.log("valor del prevblock en move",blockid);
                 tempBlocks.push(blocks.filter(a => a.id == blockid)[0]);
                 blocks = blocks.filter(function (e) {
                     return e.id != blockid
@@ -434,6 +438,7 @@ var jsflow = function (canvas, grab, release, couple, rearrange, x_space, y_spac
                     document.querySelector(".arrowid[value='" + blockid + "']").parentNode.remove();
                 }
                 var layer = blocks.filter(a => a.parent == blockid);
+                console.log("layer:", layer)
                 var flag = false;
                 var foundids = [];
                 var allids = [];
@@ -640,6 +645,7 @@ var jsflow = function (canvas, grab, release, couple, rearrange, x_space, y_spac
 
         document.addEventListener("mouseup", jsflow.endDrag, false);
         document.addEventListener("touchend", jsflow.endDrag, false);
+
     }
     function blockGrabbed(block) {
         grab(block);
